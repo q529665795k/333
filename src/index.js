@@ -16,11 +16,8 @@ export default {
 
     // ---------- 2. 拦截爬虫 / 异常代理 / 高危特征 ----------
     const ua = (request.headers.get('User-Agent') || '').toLowerCase();
-    const botPatterns = [
-      'bot', 'crawler', 'spider', 'scan', 'curl/', 'wget/',
-      'python-requests', 'httpclient', 'go-http', 'java/',
-      'nikto', 'nmap', 'masscan', 'zgrab'
-    ];
+    const botPatterns = ['nikto','nmap','masscan','zgrab','dirbuster','sqlmap','wpscan','acunetix'];
+
     if (botPatterns.some(p => ua.includes(p))) {
       return new Response(JSON.stringify({ success: false, error: 'Forbidden' }), {
         status: 403, headers: { 'Content-Type': 'application/json' }
