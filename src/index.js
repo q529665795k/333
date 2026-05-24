@@ -1,7 +1,7 @@
- // ============================================================
+// ============================================================
 // Mail Sender Worker — 基于 MailChannels 免费邮件 API
 // 域名: 808.qzz.io | 发件: q@808.qzz.io
-// 临时版本：关闭全部安全防御，仅保留发信功能用于对接测试
+// 安全加固: 方法限制 / 频率限制 / 爬虫拦截 / 注入检测
 // ============================================================
 
 export default {
@@ -14,11 +14,9 @@ export default {
       });
     }
 
-    // ---------- 2. 临时关闭：爬虫 / 异常代理拦截 ----------
-    /*
+    // ---------- 2. 拦截爬虫 / 异常代理 / 高危特征 ----------
     const ua = (request.headers.get('User-Agent') || '').toLowerCase();
     const botPatterns = ['nikto','nmap','masscan','zgrab','dirbuster','sqlmap','wpscan','acunetix'];
-
     if (botPatterns.some(p => ua.includes(p))) {
       return new Response(JSON.stringify({ success: false, error: 'Forbidden' }), {
         status: 403, headers: { 'Content-Type': 'application/json' }
@@ -31,10 +29,8 @@ export default {
         status: 403, headers: { 'Content-Type': 'application/json' }
       });
     }
-    */
 
-    // ---------- 3. 临时关闭：IP频率限制 ----------
-    /*
+    // ---------- 3. 频率限制 (IP + KV, 每小时10次) ----------
     const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown';
     const rateKey = 'rate:' + clientIP;
     const MAX_PER_HOUR = 10;
@@ -56,9 +52,8 @@ export default {
     }
     rateRecord.count += 1;
     await env.MAIL_KV.put(rateKey, JSON.stringify(rateRecord), { expirationTtl: 3600 });
-    */
 
-    // ---------- 4. 基础参数解析 ----------
+    // ---------- 4. 解析 & 校验参数 ----------
     let body;
     try {
       body = await request.json();
@@ -69,9 +64,6 @@ export default {
     }
 
     const { to, subject, text } = body;
-
-    // ---------- 临时关闭：字段校验、邮箱校验、注入检测、长度限制 ----------
-    /*
     const errors = [];
     if (!to || typeof to !== 'string') errors.push('to is required');
     if (!subject || typeof subject !== 'string') errors.push('subject is required');
@@ -114,9 +106,8 @@ export default {
         status: 400, headers: { 'Content-Type': 'application/json' }
       });
     }
-    */
 
-    // ---------- 5. 调用 MailChannels 发信（核心功能保留） ----------
+    // ---------- 5. 调用 MailChannels 发信 ----------
     const sendPayload = {
       personalizations: [{ to: [{ email: to }] }],
       from: { email: 'q@808.qzz.io', name: '808 Mail' },
