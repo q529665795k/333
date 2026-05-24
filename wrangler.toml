@@ -1,0 +1,7 @@
+name = "mail-sender"
+main = "src/index.js"
+compatibility_date = "2024-12-01"
+
+[[kv_namespaces]]
+binding = "MAIL_KV"
+id = "6b1e30ca7bbf4e27bba850c957e45e66"
