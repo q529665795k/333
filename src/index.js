@@ -12,10 +12,17 @@ const GLOBAL_LIMIT = 100;
 const globalKey = 'global:mail_count';
 const globalDateKey = 'global:mail_date';
 
-function getTodayUTC() {
+function getBeijingTime() {
   const d = new Date();
-  return d.getUTCFullYear() + '-' + String(d.getUTCMonth() + 1).padStart(2, '0') + '-' + String(d.getUTCDate()).padStart(2, '0');
+  const bjTime = new Date(d.getTime() + 8 * 3600 * 1000);
+  const year = bjTime.getFullYear();
+  const month = String(bjTime.getMonth() + 1).padStart(2, '0');
+  const day = String(bjTime.getDate()).padStart(2, '0');
+  const hour = String(bjTime.getHours()).padStart(2, '0');
+  const min = String(bjTime.getMinutes()).padStart(2, '0');
+  return `${year}-${month}-${day} ${hour}:${min}`;
 }
+
 
 // ---------- 验证码 HTML 模板 ----------
 function buildVerifyHtml(code) {
