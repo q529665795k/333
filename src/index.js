@@ -7,7 +7,7 @@
 
 const ADMIN_EMAIL = 'q@808.qzz.io';
 const FROM_EMAIL = 'q@808.qzz.io';
-const FROM_NAME = '808 Mail';
+const FROM_NAME = '摸鱼基地';
 const GLOBAL_LIMIT = 100;
 const globalKey = 'global:mail_count';
 const globalDateKey = 'global:mail_date';
